@@ -22,3 +22,10 @@ jobs:
         env:
           COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
         run: echo "$COMMIT_MESSAGES"
+  conditional_job:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Conditional job
+        if: contains(join(github.event.commits.*.message, ', '), '#skip')
+        run: echo "This job runs only if the commit messages contain '#skip'"
