@@ -53,7 +53,7 @@ jobs:
           DEFAULT_BUMP: patch
 
   notify_discord:
-    if: always() # ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') }}
+    if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') }}
     needs: [simple_deployment_pipeline, tag_release]
     runs-on: ubuntu-20.04
     steps:
@@ -66,8 +66,8 @@ jobs:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Send failure message to discord webhook
         uses: rjstone/discord-webhook-notify@v1
-        if: ${{ needs.simple_deployment_pipeline.result == 'failure' || needs.tag_release.result == 'failure' }}
+        if: ${{ needs.simple_deployment_pipeline.result != 'success' || needs.tag_release.result != 'success' }}
         with:
           severity: error
-          details: Deployment pipeline failed! 😢 Commit ${{ github.event.commits[github.event.commits.length-1].url }} broke the build.
+          details: Deployment pipeline failed! 😢
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
