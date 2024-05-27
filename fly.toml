@@ -9,6 +9,9 @@ primary_region = 'ams'
 [env]
   PORT = "3000" # add this where PORT matches the internal_port below
 
+[deploy]
+  strategy = "canary"
+
 [processes]
   app = "node app.js" # add this
 
