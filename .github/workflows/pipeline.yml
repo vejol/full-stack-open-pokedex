@@ -59,14 +59,14 @@ jobs:
     steps:
       - name: Send success message to discord webhook
         uses: rjstone/discord-webhook-notify@v1
-        # if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') && success()  }}
+        if: success() # ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') }}
         with:
           severity: info
           details: A new version of Pokedex deployed! 🚀 https://fullstack-osa11-pokemon-app.fly.dev/
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Send failure message to discord webhook
         uses: rjstone/discord-webhook-notify@v1
-        # if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') && failure()  }}
+        if: failure() # ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') }}
         with:
           severity: error
           details: Deployment pipeline failed! 😢
