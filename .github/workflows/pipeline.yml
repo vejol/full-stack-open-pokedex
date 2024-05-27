@@ -69,5 +69,5 @@ jobs:
         if: ${{ needs.simple_deployment_pipeline.result == 'failure' || needs.tag_release.result == 'failure' }}
         with:
           severity: error
-          details: Deployment pipeline failed! 😢 Commit ${{ github.event.commits.url }} broke the build.
+          details: Deployment pipeline failed! 😢 Commit ${{ github.event.commits[github.event.commits.length-1].url }} broke the build.
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
