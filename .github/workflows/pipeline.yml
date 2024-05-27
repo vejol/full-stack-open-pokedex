@@ -53,20 +53,20 @@ jobs:
           DEFAULT_BUMP: patch
 
   notify_discord:
-    if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') }}
+    if: always()
     needs: [simple_deployment_pipeline, tag_release]
     runs-on: ubuntu-20.04
     steps:
       - name: Send success message to discord webhook
         uses: rjstone/discord-webhook-notify@v1
-        if: ${{ needs.simple_deployment_pipeline.result == 'success' && needs.tag_release.result == 'success' }}
+        if: ${{ needs.simple_deployment_pipeline.result == 'success' && needs.tag_release.result == 'success' && github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') }}
         with:
           severity: info
           details: A new version of Pokedex deployed! 🚀 https://fullstack-osa11-pokemon-app.fly.dev/
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Send failure message to discord webhook
         uses: rjstone/discord-webhook-notify@v1
-        if: ${{ needs.simple_deployment_pipeline.result != 'success' || needs.tag_release.result != 'success' }}
+        if: ${{ (needs.simple_deployment_pipeline.result != 'success' || needs.tag_release.result != 'success') && github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') }}
         with:
           severity: error
           details: Deployment pipeline failed! 😢
