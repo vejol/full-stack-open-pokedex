@@ -1,0 +1,26 @@
+# fly.toml app configuration file generated for fullstack-osa11-pokemon-app on 2024-05-27T11:09:26+03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'fullstack-osa11-pokemon-app'
+primary_region = 'ams'
+
+[env]
+  PORT = "3000" # add this where PORT matches the internal_port below
+
+[processes]
+  app = "node app.js" # add this
+
+[build]
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  size = 'shared-cpu-1x'
